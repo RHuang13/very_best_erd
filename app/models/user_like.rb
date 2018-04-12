@@ -5,6 +5,10 @@ class UserLike < ApplicationRecord
 
   # Indirect associations
 
+  has_one    :dish,
+             :through => :venue,
+             :source => :dish
+
   # Validations
 
 end

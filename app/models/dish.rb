@@ -6,6 +6,10 @@ class Dish < ApplicationRecord
 
   # Indirect associations
 
+  has_many   :user_likes,
+             :through => :venues,
+             :source => :user_likes
+
   # Validations
 
 end
