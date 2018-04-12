@@ -27,13 +27,22 @@
         <input type="text" id="name" name="name" placeholder="Name" class="form-control" value="<%= @venue.name %>">
       </div>
 
-      <!-- Label and input for dish_id -->
+      <!-- Label and input for address -->
       <div class="form-group">
-        <label for="dish_id" class="control-label">
-          Dish
+        <label for="address" class="control-label">
+          Address
         </label>
 
-        <%= select_tag(:dish_id, options_from_collection_for_select(Dish.all, :id, :name, @venue.dish_id), :class => "form-control") %>
+        <input type="text" id="address" name="address" placeholder="Address" class="form-control" value="<%= @venue.address %>">
+      </div>
+
+      <!-- Label and input for neighbourhood -->
+      <div class="form-group">
+        <label for="neighbourhood" class="control-label">
+          Neighbourhood
+        </label>
+
+        <input type="text" id="neighbourhood" name="neighbourhood" placeholder="Neighbourhood" class="form-control" value="<%= @venue.neighbourhood %>">
       </div>
 
       <button class="btn btn-warning">

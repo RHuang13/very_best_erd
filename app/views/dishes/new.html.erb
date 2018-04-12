@@ -36,6 +36,15 @@
         <input type="text" id="cuisine" name="cuisine" placeholder="Cuisine" class="form-control" value="<%= @dish.cuisine %>">
       </div>
 
+      <!-- Label and input for venue_id -->
+      <div class="form-group">
+        <label for="venue_id" class="control-label">
+          Venue
+        </label>
+
+        <%= select_tag(:venue_id, options_from_collection_for_select(Venue.all, :id, :name, @dish.venue_id), :class => "form-control") %>
+      </div>
+
       <button class="btn btn-success">
         Create Dish
       </button>

@@ -14,6 +14,11 @@
   </div>
 
 <div class="form-group">
+    <%= f.label :neighbourhood_cont, "Neighbourhood contains" %>
+    <%= f.text_field :neighbourhood_cont, :class => "form-control", :placeholder => "Neighbourhood contains" %>
+  </div>
+
+<div class="form-group">
           <%= f.label :created_at, "Created at" %>
           <div class="row">
             <div class='col-md-6 mb-1'>
@@ -54,8 +59,8 @@
       </script>
 
         <div class="form-group">
-      <%= f.label :dish_name_cont, "Dish name contains" %>
-      <%= f.text_field :dish_name_cont, :class => "form-control", :placeholder => "Dish name contains" %>
+      <%= f.label :dishes_name_cont, "Dish name contains" %>
+      <%= f.text_field :dishes_name_cont, :class => "form-control", :placeholder => "Dish name contains" %>
     </div>
 
       <%= f.submit :class => "btn btn-primary btn-block mb-1" %>
@@ -68,25 +73,30 @@
   </div>
 </div>
 
+
+<div class="row m-b-2">
+  <div class="col-md-12">
+    <div>
+      <div id="location_map" style="height: 480px;"></div>
+    </div>
+  </div>
+</div>
+
 <div class="row">
   <div class="col-md-12">
     <table class="table table-striped table-hover">
       <tr>
         <th>Name</th>
-        <th>Dish</th>
+        <th>Address</th>
+        <th>Neighbourhood</th>
         <th>Actions</th>
       </tr>
 
       <% @venues.each do |venue| %>
       <tr>
         <td><%= venue.name %></td>
-        <td>
-          <% if venue.dish.present? %>
-            <a href="/dishes/<%= venue.dish.id %>">
-              <%= venue.dish.name %>
-            </a>
-          <% end %>
-        </td>
+        <td><%= venue.address %></td>
+        <td><%= venue.neighbourhood %></td>
         <td>
           <a href="/venues/<%= venue.id %>" class="btn btn-primary">Show</a>
           <a href="/venues/<%= venue.id %>/edit" class="btn btn-warning">Edit</a>
@@ -98,3 +108,14 @@
     <%= paginate @venues, theme: 'twitter-bootstrap-4' %>
   </div>
 </div>
+
+<script src="//maps.google.com/maps/api/js?v=3.24&key=AIzaSyCOTPWiuvyyo6sKoIBzKA4-1ol-vTOIOlM"></script>
+<script src="//cdn.rawgit.com/mahnunchik/markerclustererplus/master/dist/markerclusterer.min.js"></script>
+<script>
+  handler = Gmaps.build('Google');
+  handler.buildMap({ provider: {}, internal: {id: 'location_map'}}, function(){
+    markers = handler.addMarkers(<%= raw @location_hash.to_json %>);
+    handler.bounds.extendWith(markers);
+    handler.fitMapToBounds();
+  });
+</script>

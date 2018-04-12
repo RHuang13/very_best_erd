@@ -1,42 +1,27 @@
 <div class="page-header">
-  <h3>Dish #<%= @dish.id %></h3>
+  <h3>User #<%= @user.id %></h3>
 </div>
 
 <div class="row">
   <div class="col-md-12 mb-2">
     <dl class="dl-horizontal">
-      <dt>Name</dt>
-      <dd><%= @dish.name %></dd>
-
-      <dt>Cuisine</dt>
-      <dd><%= @dish.cuisine %></dd>
-
-      <dt>Venue</dt>
-      <dd>
-        <% if @dish.menu_item.present? %>
-          <a href="/venues/<%= @dish.venue_id %>">
-            <%= @dish.menu_item.name %>
-          </a>
-        <% end %>
-      </dd>
-
     </dl>
 
     <div class="btn-group btn-group-justified">
-      <a href="/dishes" class="btn btn-primary">
+      <a href="/users" class="btn btn-primary">
         Back
       </a>
-      <a href="/dishes/<%= @dish.id %>/edit" class="btn btn-warning">
+      <a href="/users/<%= @user.id %>/edit" class="btn btn-warning">
         Edit
       </a>
-      <a href="/delete_dish/<%= @dish.id %>" class="btn btn-danger" rel="nofollow">
+      <a href="/delete_user/<%= @user.id %>" class="btn btn-danger" rel="nofollow">
         Delete
       </a>
     </div>
   </div>
 </div>
 
-<!-- A Dish has many best_dishes -->
+<!-- A User has many best_dishes -->
 
 <div class="row">
   <div class="col-md-12">
@@ -45,7 +30,7 @@
         Best Dishes
       </li>
 
-      <% @dish.best_dishes.each do |bookmark| %>
+      <% @user.best_dishes.each do |bookmark| %>
         <li class="list-group-item">
           <a href="/bookmarks/<%= bookmark.id %>">
             <%= bookmark.dish_id %>
@@ -79,16 +64,16 @@
       </div>
 
       <!-- Label and input for dish_id -->
-      <input type="hidden" name="dish_id" value="<%= @dish.id %>">
-
-      <!-- Label and input for user_id -->
       <div class="form-group">
-        <label for="user_id" class="control-label">
-          User
+        <label for="dish_id" class="control-label">
+          Dish
         </label>
 
-        <%= select_tag(:user_id, options_from_collection_for_select(User.all, :id, :created_at), :class => "form-control") %>
+        <%= select_tag(:dish_id, options_from_collection_for_select(Dish.all, :id, :name), :class => "form-control") %>
       </div>
+
+      <!-- Label and input for user_id -->
+      <input type="hidden" name="user_id" value="<%= @user.id %>">
 
       <!-- Label and input for notes -->
       <div class="form-group">

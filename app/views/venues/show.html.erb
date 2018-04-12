@@ -8,14 +8,15 @@
       <dt>Name</dt>
       <dd><%= @venue.name %></dd>
 
-      <dt>Dish</dt>
+      <dt>Address</dt>
       <dd>
-        <% if @venue.dish.present? %>
-          <a href="/dishes/<%= @venue.dish_id %>">
-            <%= @venue.dish.name %>
-          </a>
-        <% end %>
+        <div>
+          <div id="location_map" style="height: 480px;"></div>
+        </div>
       </dd>
+
+      <dt>Neighbourhood</dt>
+      <dd><%= @venue.neighbourhood %></dd>
 
     </dl>
 
@@ -42,19 +43,19 @@
         User Likes
       </li>
 
-      <% @venue.user_likes.each do |user_like| %>
+      <% @venue.user_likes.each do |bookmark| %>
         <li class="list-group-item">
-          <a href="/user_likes/<%= user_like.id %>">
-            <%= user_like.id %>
+          <a href="/bookmarks/<%= bookmark.id %>">
+            <%= bookmark.dish_id %>
           </a>
           <div class="btn-group btn-group-xs pull-right">
-            <a href="/user_likes/<%= user_like.id %>" class="btn btn-primary">
+            <a href="/bookmarks/<%= bookmark.id %>" class="btn btn-primary">
               <i class="fa fa-search-plus"></i>
             </a>
-            <a href="/user_likes/<%= user_like.id %>/edit" class="btn btn-warning">
+            <a href="/bookmarks/<%= bookmark.id %>/edit" class="btn btn-warning">
               <i class="fa fa-edit"></i>
             </a>
-            <a href="/delete_user_like/<%= user_like.id %>" class="btn btn-danger" rel="nofollow">
+            <a href="/delete_bookmark/<%= bookmark.id %>" class="btn btn-danger" rel="nofollow">
               <i class="fa fa-trash-o"></i>
             </a>
           </div>
@@ -62,7 +63,7 @@
       <% end %>
 
       <li class="list-group-item">
-        <form action="/create_user_like" method="post">
+        <form action="/create_bookmark" method="post">
       <!-- Hidden input for authenticity token to protect from forgery -->
       <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
 
@@ -75,14 +76,113 @@
           Dish
         </label>
 
-        <input type="text" id="dish_id" name="dish_id" placeholder="Dish" class="form-control" value="">
+        <%= select_tag(:dish_id, options_from_collection_for_select(Dish.all, :id, :name), :class => "form-control") %>
+      </div>
+
+      <!-- Label and input for user_id -->
+      <div class="form-group">
+        <label for="user_id" class="control-label">
+          User
+        </label>
+
+        <%= select_tag(:user_id, options_from_collection_for_select(User.all, :id, :created_at), :class => "form-control") %>
+      </div>
+
+      <!-- Label and input for notes -->
+      <div class="form-group">
+        <label for="notes" class="control-label">
+          Notes
+        </label>
+
+        <textarea id="notes" name="notes" placeholder="Notes" class="form-control" rows="3"></textarea>
       </div>
 
       <button class="btn btn-block btn-success">
-        Create User Like
+        Create Bookmark
       </button>
     </form>
       </li>
     </ul>
   </div>
 </div>
+
+<!-- A Venue has many dishes -->
+
+<div class="row">
+  <div class="col-md-12">
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-info">
+        Dishes
+      </li>
+
+      <% @venue.dishes.each do |dish| %>
+        <li class="list-group-item">
+          <a href="/dishes/<%= dish.id %>">
+            <%= dish.name %>
+          </a>
+          <div class="btn-group btn-group-xs pull-right">
+            <a href="/dishes/<%= dish.id %>" class="btn btn-primary">
+              <i class="fa fa-search-plus"></i>
+            </a>
+            <a href="/dishes/<%= dish.id %>/edit" class="btn btn-warning">
+              <i class="fa fa-edit"></i>
+            </a>
+            <a href="/delete_dish/<%= dish.id %>" class="btn btn-danger" rel="nofollow">
+              <i class="fa fa-trash-o"></i>
+            </a>
+          </div>
+        </li>
+      <% end %>
+
+      <li class="list-group-item">
+        <form action="/create_dish" method="post">
+      <!-- Hidden input for authenticity token to protect from forgery -->
+      <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+      <!-- Label and input for name -->
+      <div class="form-group">
+        <label for="name" class="control-label">
+          Name
+        </label>
+
+        <input type="text" id="name" name="name" placeholder="Name" class="form-control" value="">
+      </div>
+
+      <!-- Label and input for cuisine -->
+      <div class="form-group">
+        <label for="cuisine" class="control-label">
+          Cuisine
+        </label>
+
+        <input type="text" id="cuisine" name="cuisine" placeholder="Cuisine" class="form-control" value="">
+      </div>
+
+      <!-- Label and input for venue_id -->
+      <input type="hidden" name="venue_id" value="<%= @venue.id %>">
+
+      <button class="btn btn-block btn-success">
+        Create Dish
+      </button>
+    </form>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+<script src="//maps.google.com/maps/api/js?v=3.24&key=AIzaSyCOTPWiuvyyo6sKoIBzKA4-1ol-vTOIOlM"></script>
+<script src="//cdn.rawgit.com/mahnunchik/markerclustererplus/master/dist/markerclusterer.min.js"></script>
+<script>
+  handler = Gmaps.build('Google');
+  handler.buildMap({ provider: {}, internal: {id: 'location_map'}}, function(){
+    markers = handler.addMarkers([
+      {
+        "lat": <%= @venue.address_latitude %>,
+        "lng": <%= @venue.address_longitude %>,
+        "infowindow": "<h5><%= @venue.created_at %></h5><small><%= @venue.address_formatted_address %></small>"
+      }
+    ]);
+    handler.bounds.extendWith(markers);
+    handler.fitMapToBounds();
+  });
+</script>

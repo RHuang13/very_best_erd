@@ -59,8 +59,8 @@
       </script>
 
         <div class="form-group">
-      <%= f.label :venues_name_cont, "Venue name contains" %>
-      <%= f.text_field :venues_name_cont, :class => "form-control", :placeholder => "Venue name contains" %>
+      <%= f.label :menu_item_name_cont, "Venue name contains" %>
+      <%= f.text_field :menu_item_name_cont, :class => "form-control", :placeholder => "Venue name contains" %>
     </div>
 
       <%= f.submit :class => "btn btn-primary btn-block mb-1" %>
@@ -79,6 +79,7 @@
       <tr>
         <th>Name</th>
         <th>Cuisine</th>
+        <th>Venue</th>
         <th>Actions</th>
       </tr>
 
@@ -86,6 +87,13 @@
       <tr>
         <td><%= dish.name %></td>
         <td><%= dish.cuisine %></td>
+        <td>
+          <% if dish.menu_item.present? %>
+            <a href="/venues/<%= dish.menu_item.id %>">
+              <%= dish.menu_item.name %>
+            </a>
+          <% end %>
+        </td>
         <td>
           <a href="/dishes/<%= dish.id %>" class="btn btn-primary">Show</a>
           <a href="/dishes/<%= dish.id %>/edit" class="btn btn-warning">Edit</a>

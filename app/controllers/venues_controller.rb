@@ -1,13 +1,19 @@
 class VenuesController < ApplicationController
   def index
     @q = Venue.ransack(params[:q])
-    @venues = @q.result(:distinct => true).includes(:user_likes, :dish).page(params[:page]).per(10)
+    @venues = @q.result(:distinct => true).includes(:user_likes, :dishes).page(params[:page]).per(10)
+    @location_hash = Gmaps4rails.build_markers(@venues.where.not(:address_latitude => nil)) do |venue, marker|
+      marker.lat venue.address_latitude
+      marker.lng venue.address_longitude
+      marker.infowindow "<h5><a href='/venues/#{venue.id}'>#{venue.name}</a></h5><small>#{venue.address_formatted_address}</small>"
+    end
 
     render("venues/index.html.erb")
   end
 
   def show
-    @user_like = UserLike.new
+    @dish = Dish.new
+    @bookmark = Bookmark.new
     @venue = Venue.find(params[:id])
 
     render("venues/show.html.erb")
@@ -23,7 +29,8 @@ class VenuesController < ApplicationController
     @venue = Venue.new
 
     @venue.name = params[:name]
-    @venue.dish_id = params[:dish_id]
+    @venue.address = params[:address]
+    @venue.neighbourhood = params[:neighbourhood]
 
     save_status = @venue.save
 
@@ -51,7 +58,8 @@ class VenuesController < ApplicationController
     @venue = Venue.find(params[:id])
 
     @venue.name = params[:name]
-    @venue.dish_id = params[:dish_id]
+    @venue.address = params[:address]
+    @venue.neighbourhood = params[:neighbourhood]
 
     save_status = @venue.save
 

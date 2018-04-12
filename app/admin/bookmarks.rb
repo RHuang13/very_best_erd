@@ -1,6 +1,6 @@
-ActiveAdmin.register Venue do
+ActiveAdmin.register Bookmark do
 
- permit_params :name, :address, :neighbourhood
+ permit_params :venue_id, :dish_id, :user_id, :notes
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
