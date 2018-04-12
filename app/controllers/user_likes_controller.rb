@@ -1,6 +1,6 @@
 class UserLikesController < ApplicationController
   def index
-    @user_likes = UserLike.all
+    @user_likes = UserLike.page(params[:page]).per(10)
 
     render("user_likes/index.html.erb")
   end
