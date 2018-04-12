@@ -14,6 +14,18 @@
   </div>
 
 <div class="form-group">
+  <%= f.label :dish_id, "Dish" %>
+  <div class="row">
+    <div class='col-md-6 mb-1'>
+      <%= f.text_field :dish_id_gteq, :class => "form-control", :placeholder => "Dish greater than or equal to" %>
+    </div>
+    <div class='col-md-6'>
+      <%= f.text_field :dish_id_lteq, :class => "form-control", :placeholder => "Dish less than or equal to" %>
+    </div>
+  </div>
+</div>
+
+<div class="form-group">
           <%= f.label :created_at, "Created at" %>
           <div class="row">
             <div class='col-md-6 mb-1'>
@@ -53,10 +65,7 @@
           });
       </script>
 
-        <div class="form-group">
-      <%= f.label :dish_name_cont, "Dish name contains" %>
-      <%= f.text_field :dish_name_cont, :class => "form-control", :placeholder => "Dish name contains" %>
-    </div>
+        
 
       <%= f.submit :class => "btn btn-primary btn-block mb-1" %>
 
@@ -80,13 +89,7 @@
       <% @venues.each do |venue| %>
       <tr>
         <td><%= venue.name %></td>
-        <td>
-          <% if venue.dish.present? %>
-            <a href="/dishes/<%= venue.dish.id %>">
-              <%= venue.dish.name %>
-            </a>
-          <% end %>
-        </td>
+        <td><%= venue.dish_id %></td>
         <td>
           <a href="/venues/<%= venue.id %>" class="btn btn-primary">Show</a>
           <a href="/venues/<%= venue.id %>/edit" class="btn btn-warning">Edit</a>

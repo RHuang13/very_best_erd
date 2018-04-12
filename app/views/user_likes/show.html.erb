@@ -15,7 +15,13 @@
       </dd>
 
       <dt>Dish</dt>
-      <dd><%= @user_like.dish_id %></dd>
+      <dd>
+        <% if @user_like.dish.present? %>
+          <a href="/dishes/<%= @user_like.dish_id %>">
+            <%= @user_like.dish.name %>
+          </a>
+        <% end %>
+      </dd>
 
     </dl>
 

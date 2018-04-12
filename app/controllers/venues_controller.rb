@@ -1,7 +1,7 @@
 class VenuesController < ApplicationController
   def index
     @q = Venue.ransack(params[:q])
-    @venues = @q.result(:distinct => true).includes(:user_likes, :dish).page(params[:page]).per(10)
+    @venues = @q.result(:distinct => true).includes(:user_likes).page(params[:page]).per(10)
 
     render("venues/index.html.erb")
   end
